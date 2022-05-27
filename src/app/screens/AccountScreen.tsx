@@ -19,14 +19,12 @@ export default function AccountScreen(props) {
                     {account_name}
                 </div>
                 <div className={`h-24 w-24 cursor-pointer hover:bg-black hover:bg-opacity-20`}
-                    onClick={() => {
+                    onClick={async () => {
                         setSwitchingUser(true);
-                        window["electron"].setCurrentUser(account_name).then(() => {
-                            props.updateUser().then(() => {
-                                setSwitchingUser(false);
-                                props.setSwitchingAccounts(false);
-                            });
-                        });
+                        await window["electron"].setCurrentUser(account_name);
+                        await props.updateUser();
+                        setSwitchingUser(false);
+                        props.setSwitchingAccounts(false);
                     }}>
 
                     <img className="m-auto h-24 w-24 rounded" src={getAvatarURL(accounts[account_name].avatarHash)}/>
